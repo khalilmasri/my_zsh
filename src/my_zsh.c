@@ -1,6 +1,5 @@
 #include "../include/include.h"
 
-
 status_t execute_args(argument *table){
 
     if(table->args[0] == NULL)
@@ -17,15 +16,15 @@ status_t execute_args(argument *table){
         case ECHO:
             func_ptr = echo;
             break;
-        /* case SETENV: */
-
-        /*     break; */
+        case SETENV:
+            func_ptr = my_setenv;
+            break;
         /* case UNSETENV: */
             
         /*     break; */
-        /* case ENV: */
-
-        /*     break; */
+        case ENV:
+            func_ptr = env;
+            break;
         case EXIT:
             return QUIT;
             break;
