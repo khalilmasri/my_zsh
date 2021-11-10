@@ -31,9 +31,35 @@ char *store_arg(char *str, int index, int size){
 
 void print_argument(argument *table){
 
+    printf("Command type : %d\n", table->command);
     for(int i = 0 ; i < table->size; i++)
         printf("%s ", table->args[i]);
+
+    printf("\n");
 }
+
+builtins_t get_command(argument *table){
+
+    if(my_strcmp(table->args[0], "echo") == 0)
+        return ECHO;
+    if(my_strcmp(table->args[0], "cd") == 0)
+        return CD;
+    if(my_strcmp(table->args[0], "setenv") == 0)
+        return SETENV;
+    if(my_strcmp(table->args[0], "unsetenv") == 0)
+        return UNSETENV;
+    if(my_strcmp(table->args[0], "env") == 0)
+        return ENV;
+    if(my_strcmp(table->args[0], "exit") == 0)
+        return EXIT;
+    if(my_strcmp(table->args[0], "pwd") == 0)
+        return PWD;
+    if(my_strcmp(table->args[0], "which") == 0)
+        return WHICH;
+
+    return UNKNOWN_BUILTIN;
+}
+
 
 void free_argument(argument *table){
     
@@ -41,7 +67,7 @@ void free_argument(argument *table){
         free(table->args[i]);
     }
 
-    free(table);
+    /* free(table); */
 }
 
 argument *parse_input(argument* table, char* input){
@@ -57,6 +83,8 @@ argument *parse_input(argument* table, char* input){
         table->args[i] = store_arg(input, index-size-1, size);
     }
 
-    print_argument(table);
+    table->args[table->size] = NULL;
+    table->command = get_command(table);
+    /* print_argument(table); */
     return table;
 }
