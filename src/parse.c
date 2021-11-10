@@ -82,8 +82,9 @@ argument *parse_input(argument* table, char* input){
         index += size + 1;
         table->args[i] = store_arg(input, index-size-1, size);
     }
-
     table->args[table->size] = NULL;
+
+    
     table->command = get_command(table);
     /* print_argument(table); */
     return table;
