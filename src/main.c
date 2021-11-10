@@ -18,22 +18,26 @@
 
 #include "../include/include.h"
 
-int main(void){
+int main(int argc, char *argv[], char **envi){
 
+    if(argc > 1){
+        *argv = NULL;
+        my_putstr("my_zsh: can't take input.\n");
+        return 0;
+    }
+    
     char *std_in = "\0";
     status_t status = 0;
     argument *table = malloc(sizeof(argument));
 
-    char current_dir[MAX_STR_LEN];
-    getcwd(current_dir, MAX_STR_LEN);
-    my_putstr(current_dir);
-    my_putstr("\n");
+    print_current_dir();
 
     while(status != QUIT){
-        write(0, "> ", my_strlen("> "));
+        display_prompt();
         std_in = my_readline();
         table->size = arg_count(std_in); 
         table = parse_input(table,std_in);
+        table->env = get_env(table,envi);
         status = execute_args(table);
 
         free(std_in);
