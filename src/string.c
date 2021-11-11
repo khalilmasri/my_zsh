@@ -10,6 +10,13 @@ size_t my_strlen(char *str)
     return size + 1;
 }
 
+int is_exec(char *str)
+{
+    if (str[0] == '.' && str[1] == '/')
+        return 1;
+    return 0;
+}
+
 char *my_strcpy(char *dest, char *src)
 {
     while (*src != '\0')

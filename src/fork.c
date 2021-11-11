@@ -39,6 +39,63 @@ found:
     return bin;
 }
 
+///////////
+char *get_run(argument *table)
+{
+    unsigned long i = 1, j = 0;
+    //DIR *dir;
+    char *run = malloc(sizeof(char) * MAX_STR_LEN);
+    getcwd(run, MAX_STR_LEN);
+    j = my_strlen(run) - 1;
+    while (table->args[0][i] != '\0')
+    {
+        run[j] = table->args[0][i];
+        i++;
+        j++;
+    }
+    run[j] = '\0';
+
+    printf("current: %s\n", run);
+
+    return run;
+}
+
+//////////
+status_t run(argument *table)
+{
+    pid_t pid, wpid;
+    int status;
+    char *run = get_run(table);
+
+    if (run == NULL)
+    {
+        my_putstr("our_zsh: command not found: ");
+        my_putstr(table->args[0]);
+        my_putstr("\n");
+        return ERROR;
+    }
+
+    pid = fork();
+
+    if (pid == 0)
+    {
+        if (execv(run, table->args) == 1)
+        {
+            perror("lsh");
+        }
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        do
+        {
+            wpid = waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status) && wpid > 0);
+    }
+
+    return SUCCESS;
+}
+
 status_t execute(argument *table)
 {
     pid_t pid, wpid;

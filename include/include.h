@@ -36,6 +36,7 @@ typedef enum{
     EXIT,
     PWD,
     WHICH,
+    RUN,
     EXECUTE,
 }builtins_t;
 
@@ -58,6 +59,7 @@ typedef struct arguments_s{
 
 char* my_strcat(char*, char*);
 size_t my_strlen(char*);
+int is_exec(char*);
 char *my_strcpy(char*, char*);
 int my_strcmp(char*, char*);
 int is_digit(char);
@@ -110,6 +112,10 @@ char **get_env(argument*,char**);
 int check_variable_exist(char*, char*);
 char *cut_variable(char*);
 status_t my_unsetenv(argument*);
+//
+char* get_run(argument*);
+status_t run(argument*);
+//
 status_t execute(argument*);
 
 #endif

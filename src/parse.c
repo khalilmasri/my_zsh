@@ -55,6 +55,8 @@ builtins_t get_command(argument *table)
         return PWD;
     if (my_strcmp(table->args[0], "which") == 0)
         return WHICH;
+    if (is_exec(table->args[0]) == 1)
+        return RUN;
 
     return EXECUTE;
 }
@@ -66,7 +68,6 @@ void free_argument(argument *table)
         free(table->args[i]);
         free(table->paths);
     }
-    /* free(table); */
 }
 
 int get_paths_amount(char *str)
@@ -141,7 +142,7 @@ argument *parse_input(argument *table, char *input)
         table->args[i] = store_arg(input, index - size - 1, size);
     }
     table->args[table->size] = NULL;
-
     table->command = get_command(table);
+    print_argument(table);
     return table;
 }
