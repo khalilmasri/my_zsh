@@ -125,6 +125,7 @@ status_t which(argument*);
 status_t env(argument*);
 status_t my_setenv(argument*);
 char **get_env(argument*,char**);
+status_t my_unsetenv(argument*);
 
 #endif
 // --------------------------------------------------------------------------------
