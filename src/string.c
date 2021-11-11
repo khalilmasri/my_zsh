@@ -7,7 +7,7 @@ size_t my_strlen(char *str){
     while(str[size])
         size++;
 
-    return size;
+    return size+1;
 }
 
 int my_memset(char *buffer, char c, int size)
@@ -187,18 +187,17 @@ void my_putchar(int fd, char*str){
         if(str[index] != '"'){
             write(fd, &str[index], 1);
         }
-            index++;
+        index++;
     }
 }
 
 char* my_strcat(char *dest, char* src){
+    char* ptr = dest + strlen(dest);
 
-    char *ptr = dest + my_strlen(dest);
-
-    while(*src){
+    while (*src != '\0') {
         *ptr++ = *src++;
     }
-
+    
     *ptr = '\0';
 
     return dest;
