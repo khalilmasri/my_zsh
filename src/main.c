@@ -41,7 +41,7 @@ int main(int argc, char *argv[], char **envi)
         std_in = my_readline();
         table->size = arg_count(std_in);
         table = parse_input(table, std_in);
-        status = execute_args(table);
+        status = my_zsh(table);
 
         free(std_in);
     }
