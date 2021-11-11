@@ -15,6 +15,7 @@
 
 #define MAX_STR_LEN 1024
 #define MAX_DICT_LEN 100
+#define BIN "/usr/bin/"
 #define ENV_VAR 'e'
 #define VAR 'v'
 
