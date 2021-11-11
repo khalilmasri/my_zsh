@@ -57,7 +57,7 @@ builtins_t get_command(argument *table){
     if(my_strcmp(table->args[0], "which") == 0)
         return WHICH;
 
-    return UNKNOWN_BUILTIN;
+    return EXECUTE;
 }
 
 
