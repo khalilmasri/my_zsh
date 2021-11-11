@@ -108,6 +108,7 @@ long my_atoi(char *number_string, int size)
 int my_strcmp(char *ptr1, char *ptr2)
 {
     int i = 0;
+
     while ((ptr1[i] != '\0') || (ptr2[i] != '\0'))
     {
         if (ptr1[i] > ptr2[i])
@@ -138,10 +139,10 @@ int is_char(char c) {
 }
 
 int arg_count(char *str){
-    
+
     int index   = 0,
         size    = 0;
-        
+
     while(str[index]){
 
         if(str[index] == ' '){
@@ -155,5 +156,51 @@ int arg_count(char *str){
     size++;
 
     return size;
+}
+
+int my_getchar(){
+
+    static char buff[MAX_STR_LEN],
+    *buff_ptr = buff;
+    static int index = 0;
+
+    if(index == 0){
+        index = read(0, buff, 1);
+        buff_ptr = buff;
+    }
+
+    if(--index >= 0)
+        return *buff_ptr++;
+
+    return EOF;
+}
+
+void my_putstr(char *str){
+    write(0, str, my_strlen(str));
+}
+
+void my_putchar(int fd, char*str){
+
+    int index = 0;
+
+    while(str[index]){
+        if(str[index] != '"'){
+            write(fd, &str[index], 1);
+        }
+            index++;
+    }
+}
+
+char* my_strcat(char *dest, char* src){
+
+    char *ptr = dest + my_strlen(dest);
+
+    while(*src){
+        *ptr++ = *src++;
+    }
+
+    *ptr = '\0';
+
+    return dest;
 }
 

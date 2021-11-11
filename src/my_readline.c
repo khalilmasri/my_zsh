@@ -2,15 +2,14 @@
 
 char *my_readline(){
 
-    char *buffer;
+    char *buffer = NULL;
+    buffer = malloc(sizeof(char)*MAX_STR_LEN);
 
-    if((buffer = malloc(sizeof(char)*MAX_STR_LEN)) == NULL)
-        return NULL;
 
     int read_input = STDIN_FILENO;
 
-    read(read_input, buffer, MAX_STR_LEN);
-    buffer[my_strlen(buffer)-1] = '\0';
+    int last = read(read_input, buffer, MAX_STR_LEN);
+    buffer[last-1] = '\0';
     
     return buffer;
 }
