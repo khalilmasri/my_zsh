@@ -57,12 +57,8 @@ typedef struct arguments_s{
 #define STRING_H
 
 char* my_strcat(char*, char*);
-int my_memset(char*, char, int);
 size_t my_strlen(char*);
 char *my_strcpy(char*, char*);
-void my_reverse(char*, int);
-char *my_itoa(int, char*);
-long my_atoi(char*,int);
 int my_strcmp(char*, char*);
 int is_digit(char);
 int is_char(char);
@@ -76,14 +72,6 @@ void my_putchar(int, char*);
 
 #ifndef UTILITY_H
 #define UTILITY_H
-
-void print_current_dir();
-
-#endif
-// --------------------------------------------------------------------------------
-
-#ifndef INCLUDE_H
-#define INCLUDE_H
 
 void print_current_dir();
 void display_prompt();
