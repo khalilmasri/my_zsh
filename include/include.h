@@ -19,17 +19,6 @@
 #define ENV_VAR 'e'
 #define VAR 'v'
 
-// BUILTINS
-/* #define CD "cd" */
-/* #define LS "ls" */
-/* #define ECHO "echo" */
-/* #define SETENV "setenv" */
-/* #define UNSETENV "unsetenv" */
-/* #define ENV "env" */
-/* #define EXIT "exit" */
-/* #define PWD "pwd" */
-/* #define WHICH "which" */
-
 // ENUM
 
 typedef enum{
@@ -47,7 +36,7 @@ typedef enum{
     EXIT,
     PWD,
     WHICH,
-    UNKNOWN_BUILTIN,
+    EXECUTE,
 }builtins_t;
 
 // STRUCTS
@@ -123,7 +112,7 @@ char **get_paths(argument*);
 #ifndef MY_ZSH_H
 #define MY_ZSH_H
 
-status_t execute_args(argument*);
+status_t my_zsh(argument*);
 status_t echo(argument*);
 status_t cd(argument*);
 status_t which(argument*);
@@ -133,6 +122,7 @@ char **get_env(argument*,char**);
 int check_variable_exist(char*, char*);
 char *cut_variable(char*);
 status_t my_unsetenv(argument*);
+status_t execute(argument*);
 
 #endif
 // --------------------------------------------------------------------------------
