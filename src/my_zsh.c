@@ -1,6 +1,6 @@
 #include "../include/include.h"
 
-status_t execute_args(argument *table){
+status_t my_zsh(argument *table){
 
     if(table->args[0] == NULL)
         return ERROR;
@@ -41,7 +41,8 @@ status_t execute_args(argument *table){
             func_ptr = which;
             break;
         default:
-            return ERROR;
+            func_ptr =  execute;
+            break;
     }
 
     return func_ptr(table);
