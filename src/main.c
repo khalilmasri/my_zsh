@@ -32,7 +32,7 @@ int main(int argc, char *argv[], char **envi)
     status_t status = 0;
     argument *table = malloc(sizeof(argument));
     table->env = get_env(table, envi);
-
+    table->paths = get_paths(table);
     print_current_dir();
 
     while (status != QUIT)
