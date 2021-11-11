@@ -2,7 +2,7 @@ SRC=src
 OBJ=obj
 BIN=bin
 
-CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude 
+CFLAGS +=-W  -Wall -g3 -Iinclude 
 CC=gcc
 TARGET=my_zsh
 RM=rm -rf

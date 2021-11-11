@@ -2,7 +2,7 @@
 
 builtins_t is_builtins(char *str){
 
-     if(my_strcmp(str, "echo") == 0)
+    if(my_strcmp(str, "echo") == 0)
         return ECHO;
     if(my_strcmp(str, "cd") == 0)
         return CD;
@@ -24,41 +24,50 @@ builtins_t is_builtins(char *str){
 
 status_t which(argument* table){
 
-    int index = 1;
-    DIR* dir = opendir(BIN);
+    int index = 1, i = 0;
     char ret_msg[MAX_STR_LEN];
+    DIR* dir;
 
-    if(!dir){
-        perror("dir");
-        return ERROR;
-    }
+    while(i < table->paths_size){
+        dir = opendir(table->paths[i]);
 
-
-    while(table->args[index]){
-        if(is_builtins(table->args[index]) != 0){
-            my_strcpy(ret_msg, table->args[index]);
-            my_strcat(ret_msg, ": shell built-in command\n");
-            my_putstr(ret_msg);
-        }else{
-            struct dirent *current_file;
-            current_file = readdir(dir);
-            for(;current_file;){
-                if (!my_strcmp(table->args[index], current_file->d_name)){
-                    my_strcpy(ret_msg, BIN);
-                    my_strcat(ret_msg, current_file->d_name);
-                    my_strcat(ret_msg, "\n");
-                    my_putstr(ret_msg);
-                    goto found;
-                }
-                current_file = readdir(dir);
-            }
-               my_strcpy(ret_msg, table->args[index]);
-               my_strcat(ret_msg, " not found.\n");
-               my_putstr(ret_msg);
+        if(!dir){
+            perror("dir");
+            return ERROR;
         }
-found: 
-        index++;
+
+        while(table->args[index]){
+            if(is_builtins(table->args[index]) != 0){
+                my_strcpy(ret_msg, table->args[index]);
+                my_strcat(ret_msg, ": shell built-in command\n");
+                my_putstr(ret_msg);
+                goto found;
+            }else{
+                struct dirent *current_file;
+                current_file = readdir(dir);
+                for(;current_file;){
+                    if (!my_strcmp(table->args[index], current_file->d_name)){
+                        my_strcpy(ret_msg, table->paths[i]);
+                        my_strcat(ret_msg, "/");
+                        my_strcat(ret_msg, current_file->d_name);
+                        my_strcat(ret_msg, "\n");
+                        my_putstr(ret_msg);
+                        goto found;
+                    }
+                    current_file = readdir(dir);
+                }
+            }
+            index++;
+        }
+        index = 1;
+        i++;
     }
+    my_strcpy(ret_msg, table->args[index]);
+    my_strcat(ret_msg, " not found.\n");
+    my_putstr(ret_msg);
+
+found: 
+    closedir(dir);
 
     return SUCCESS;
 }

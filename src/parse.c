@@ -65,9 +65,65 @@ void free_argument(argument *table){
     
     for(int i = 0 ; i < table->size; i++){
         free(table->args[i]);
+        free(table->paths);
     }
 
     /* free(table); */
+}
+
+int get_paths_amount(char *str){
+
+    int index = 0,
+        count = 1;
+
+    while(str[index]){
+        if(str[index] == ' ')
+            count++;
+        index++;
+    }
+
+    return count;
+}
+
+char *add_paths(char *path){
+
+    static int index = 0;
+    int cur = 0;
+
+    char *ret = malloc(sizeof(char)*MAX_STR_LEN);
+
+    while(path[index] != ' ' && path[index] != '\0'){
+        ret[cur] = path[index];
+        cur++;
+        index++;
+    }
+
+    ret[cur] = '\0';
+    index++;
+
+    return ret;
+}
+
+char **get_paths(argument *table){
+
+    int index = 0;
+    char *paths;
+
+    while(index < table->env_length){
+        if(check_variable_exist("PATH", table->env[index]) == 1){
+            paths = cut_variable(table->env[index]);
+        }
+        index++;
+    }
+
+    table->paths_size = get_paths_amount(paths);
+    char **ret = malloc(sizeof(char*)*table->paths_size);
+
+    for(int i = 0 ; i < table->paths_size; i++){
+        ret[i] = add_paths(paths);
+    }
+
+    return ret;
 }
 
 argument *parse_input(argument* table, char* input){
@@ -86,6 +142,6 @@ argument *parse_input(argument* table, char* input){
 
     
     table->command = get_command(table);
-    //print_argument(table); 
+    /* print_argument(table); */ 
     return table;
 }
