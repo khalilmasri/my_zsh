@@ -8,7 +8,6 @@ status_t execute_args(argument *table){
     status_t(*func_ptr)(argument*);
 
     char *buffer = malloc(sizeof(char)*MAX_STR_LEN);
-
     switch (table->command){
         case CD:
             func_ptr = cd;

@@ -3,13 +3,12 @@
 status_t cd(argument *table){
 
     char cwd[MAX_STR_LEN];
-
     static char prev_dir[MAX_STR_LEN];
     if(!my_strcmp(table->args[1], "-")){
         chdir(prev_dir);
         return SUCCESS;
     }
-
+    
     getcwd(prev_dir, MAX_STR_LEN);
     DIR* dir = opendir(table->args[1]);
 

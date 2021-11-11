@@ -37,8 +37,17 @@ char **get_env(argument* table,char **env){
 
 int correct_char(char c){
     if((c >= 'A' && c <= 'Z' && c !='\0') || is_digit(c) == 1 || c == '_' )
+    {
         return 1;
+    }
+    return 0;
+}
 
+int correct_char_2(char c){
+    if((((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) && c !='\0' ) || is_digit(c) == 1 || c == '_' )
+    {
+        return 1;
+    }
     return 0;
 }
 
@@ -47,8 +56,9 @@ char *get_variable(char *str){
     int index = 0;
     char *variable = malloc(sizeof(char)*MAX_STR_LEN);
 
+
     while(str[index] != '='){
-        if(correct_char(str[index]) == 1){
+        if(correct_char_2(str[index]) == 1){
             variable[index] = str[index];
         }else{
             my_putstr("Variable must be capital letters and have variable.\n");
@@ -67,7 +77,7 @@ int check_variable(char *str){
     int index = 0;
 
     while(str[index]){
-        if(correct_char(str[index]) == 1)
+        if(correct_char_2(str[index]) == 1)
             index++;
         else{
             my_putstr("Incorrect variable name.\n");
@@ -109,7 +119,7 @@ char *get_value(char *str){
 int check_variable_exist(char *new, char *exist){
 
     char *exist_var = get_variable(exist);
-
+    
     if(!(my_strcmp(new, exist_var)))
         return 1;
 
@@ -128,8 +138,8 @@ char **modify_variable(argument* table, int index){
 char **add_variable(argument *table){
 
     table->env_length+=1;
+    
     char **ret = malloc(sizeof(char*)*table->env_length+1);
-
     for(int i = 0; i < table->env_length;i++){
         if(i != table->env_length-1){
             ret[i] = malloc(sizeof(char)*my_strlen(table->env[i]));

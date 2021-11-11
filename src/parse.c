@@ -16,7 +16,7 @@ char *store_arg(char *str, int index, int size){
 
     int cur     = 0;
     
-    char *arg    = malloc((sizeof(char)*size)+1);
+    char *arg = malloc((sizeof(char)*size)+1);
     
     while(str[index] != ' ' && str[index] != '\0'){
         arg[cur] = str[index];
@@ -75,7 +75,7 @@ argument *parse_input(argument* table, char* input){
     int index   = 0,
         size    = 0;
 
-    table->args = malloc(sizeof(char*)*table->size);
+    table->args = malloc(sizeof(char*)*table->size + 1);
 
     for(int i = 0; i < table->size; i++){
         size = get_input_size(input, index); 
@@ -86,6 +86,6 @@ argument *parse_input(argument* table, char* input){
 
     
     table->command = get_command(table);
-    /* print_argument(table); */
+    //print_argument(table); 
     return table;
 }

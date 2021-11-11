@@ -18,35 +18,36 @@
 
 #include "../include/include.h"
 
-int main(int argc, char *argv[], char **envi){
+int main(int argc, char *argv[], char **envi)
+{
 
-    if(argc > 1){
+    if (argc > 1)
+    {
         *argv = NULL;
         my_putstr("my_zsh: can't take input.\n");
         return 0;
     }
-    
+
     char *std_in = "\0";
     status_t status = 0;
     argument *table = malloc(sizeof(argument));
-    table->env = get_env(table,envi);
+    table->env = get_env(table, envi);
 
     print_current_dir();
 
-    while(status != QUIT){
+    while (status != QUIT)
+    {
         display_prompt();
         std_in = my_readline();
-        table->size = arg_count(std_in); 
-        table = parse_input(table,std_in);
+        table->size = arg_count(std_in);
+        table = parse_input(table, std_in);
         status = execute_args(table);
 
         free(std_in);
     }
-        
-    free_argument(table); 
+
+    free_argument(table);
     free(table);
-    
+
     return 0;
 }
-
-
