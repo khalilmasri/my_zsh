@@ -19,9 +19,9 @@ status_t execute_args(argument *table){
         case SETENV:
             func_ptr = my_setenv;
             break;
-        /* case UNSETENV: */
-            
-        /*     break; */
+        case UNSETENV:
+            func_ptr = my_unsetenv;
+            break;
         case ENV:
             func_ptr = env;
             break;
