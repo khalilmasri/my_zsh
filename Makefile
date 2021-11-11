@@ -1,18 +1,29 @@
-CC = gcc
-CFLAGS += -Wall -Wextra -Werror -g3 
-DEPS += include/include.h
-OBJFILES = src/main.o src/my_readline.o\
-		   src/string.o src/parse.o\
-		   src/my_zsh.o src/echo.o\
-		   src/cd.o src/which.o\
-		   src/utility.o src/env.o
+SRC=src
+OBJ=obj
+BIN=bin
 
-TARGET = my_zsh
+CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude 
+CC=gcc
+TARGET=$(BIN)/my_zsh
+RM=rm -rf
+
+SRCS=$(wildcard $(SRC)/*.c)
+OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+
 all: $(TARGET)
 
-$(TARGET): $(OBJFILES) $(DEPS)
-		$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES)
+$(TARGET): $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) $(CFLAGS)
 
-.PHONY: clean
+$(OBJ)/%.o: $(SRC)/%.c
+	${CC} ${CFLAGS} -c $< -o $@
+
+# dir don't exit
+$(OBJ):
+	mkdir $@
+
+$(BIN):
+	mkdir $@
+
 clean:
-	rm -f src/*.o $(TARGET)
+	$(RM) $(TARGET) $(BIN)/*.dSYM $(OBJ)/*.o 
