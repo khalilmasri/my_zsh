@@ -7,7 +7,7 @@ size_t my_strlen(char *str){
     while(str[size])
         size++;
 
-    return size;
+    return size+1;
 }
 
 int my_memset(char *buffer, char c, int size)
