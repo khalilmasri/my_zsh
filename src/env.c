@@ -35,7 +35,7 @@ char **get_env(argument* table,char **env){
     return table->env;
 }
 
-int correct_char(char c){
+int correct_char_var(char c){
     if((c >= 'A' && c <= 'Z' && c !='\0') || is_digit(c) == 1 || c == '_' )
     {
         return 1;
@@ -43,7 +43,7 @@ int correct_char(char c){
     return 0;
 }
 
-int correct_char_2(char c){
+int correct_char_env(char c){
     if((((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) && c !='\0' ) || is_digit(c) == 1 || c == '_' )
     {
         return 1;
@@ -51,14 +51,16 @@ int correct_char_2(char c){
     return 0;
 }
 
-char *get_variable(char *str){
+char *get_variable(char *str, char c){
 
     int index = 0;
     char *variable = malloc(sizeof(char)*MAX_STR_LEN);
 
 
     while(str[index] != '='){
-        if(correct_char_2(str[index]) == 1){
+        if(c == VAR && correct_char_var(str[index]) == 1){
+            variable[index] = str[index];
+        }else if(c == ENV_VAR && correct_char_env(str[index]) == 1){
             variable[index] = str[index];
         }else{
             my_putstr("Variable must be capital letters and have variable.\n");
@@ -77,7 +79,7 @@ int check_variable(char *str){
     int index = 0;
 
     while(str[index]){
-        if(correct_char_2(str[index]) == 1)
+        if(correct_char_env(str[index]) == 1)
             index++;
         else{
             my_putstr("Incorrect variable name.\n");
@@ -118,7 +120,7 @@ char *get_value(char *str){
 
 int check_variable_exist(char *new, char *exist){
 
-    char *exist_var = get_variable(exist);
+    char *exist_var = get_variable(exist, ENV_VAR);
     
     if(!(my_strcmp(new, exist_var)))
         return 1;
@@ -150,8 +152,6 @@ char **add_variable(argument *table){
         }
     }
 
-    ret[table->env_length] = NULL;
-
     return ret;
 }
 
@@ -168,28 +168,23 @@ char **delete_variable(argument *table, int index){
             my_strcpy(ret[i], table->env[j]);
     }
 
-    ret[table->env_length] = NULL;
-
     return ret;
 }
 
 status_t my_setenv(argument *table){
 
-    if(table->size != 2){
+    if(table->size != 3){
         my_putstr("setenv usage: setenv NEWVALUE=value.\n");
         return ERROR;
     }
-
-    char *variable = get_variable(table->args[1]),
-         *value = get_value(table->args[1]);
 
     if(variable == NULL || value == NULL)
         return ERROR;
 
     int i = 0;
 
-    while(table->env[i]){
-        if(check_variable_exist(variable, table->env[i]) == 1){
+    while(i < table->env_length){
+        if(check_variable_exist(table->args[1], table->env[i]) == 1){
             table->env = modify_variable(table,i);
             my_putstr("Variable successfuly changed.\n");
             return SUCCESS;
