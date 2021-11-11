@@ -57,6 +57,8 @@ typedef struct arguments_s{
     char **args;
     char **env;
     int env_length;
+    int paths_size;
+    char **paths;
     builtins_t command;
 }argument;
 
@@ -113,6 +115,7 @@ char *my_readline();
 
 argument *parse_input(argument*, char*);
 void free_argument(argument*);
+char **get_paths(argument*);
 
 #endif
 // --------------------------------------------------------------------------------
@@ -127,6 +130,8 @@ status_t which(argument*);
 status_t env(argument*);
 status_t my_setenv(argument*);
 char **get_env(argument*,char**);
+int check_variable_exist(char*, char*);
+char *cut_variable(char*);
 status_t my_unsetenv(argument*);
 
 #endif
