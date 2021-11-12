@@ -143,6 +143,5 @@ argument *parse_input(argument *table, char *input)
     }
     table->args[table->size] = NULL;
     table->command = get_command(table);
-    print_argument(table);
     return table;
 }

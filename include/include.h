@@ -112,10 +112,8 @@ char **get_env(argument*,char**);
 int check_variable_exist(char*, char*);
 char *cut_variable(char*);
 status_t my_unsetenv(argument*);
-//
 char* get_run(argument*);
 status_t run(argument*);
-//
 status_t execute(argument*);
 
 #endif

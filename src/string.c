@@ -47,18 +47,16 @@ int my_strcmp(char *ptr1, char *ptr2)
 int is_digit(char c)
 {
     if (c >= '0' && c <= '9')
-    {
         return 1;
-    }
+
     return 0;
 }
 
 int is_char(char c)
 {
     if (c >= 'A' && c <= 'Z')
-    {
         return 1;
-    }
+
     return 0;
 }
 
@@ -76,18 +74,14 @@ int arg_count(char *str)
             size++;
             index++;
         }
-
         index++;
     }
-
     size++;
-
     return size;
 }
 
 int my_getchar()
 {
-
     static char buff[MAX_STR_LEN],
         *buff_ptr = buff;
     static int index = 0;
@@ -111,7 +105,6 @@ void my_putstr(char *str)
 
 void my_putchar(int fd, char *str)
 {
-
     int index = 0;
 
     while (str[index])
@@ -132,7 +125,6 @@ char *my_strcat(char *dest, char *src)
     {
         *ptr++ = *src++;
     }
-
     *ptr = '\0';
 
     return dest;

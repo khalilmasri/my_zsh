@@ -39,11 +39,9 @@ found:
     return bin;
 }
 
-///////////
 char *get_run(argument *table)
 {
     unsigned long i = 1, j = 0;
-    //DIR *dir;
     char *run = malloc(sizeof(char) * MAX_STR_LEN);
     getcwd(run, MAX_STR_LEN);
     j = my_strlen(run) - 1;
@@ -57,40 +55,25 @@ char *get_run(argument *table)
     return run;
 }
 
-//////////
 status_t run(argument *table)
 {
-    pid_t pid, wpid;
-    int status;
     char *run = get_run(table);
-    printf("current: %s\n", run);
 
     if (run == NULL)
     {
-        my_putstr("our_zsh: command not found: ");
+        my_putstr("my_zsh: command not found: ");
         my_putstr(table->args[0]);
         my_putstr("\n");
         return ERROR;
     }
 
-    pid = fork();
-
-    if (pid == 0)
+    if (execve(run, table->args, table->env) == -1)
     {
-        if (execve(run, table->args, table->env) == 1)
-        {
-            perror("lsh");
-        }
-        exit(EXIT_FAILURE);
+        my_putstr("my_zsh: no such file or directory: ");
+        my_putstr(table->args[0]);
+        my_putstr("\n");
+        return ERROR;
     }
-    else
-    {
-        do
-        {
-            wpid = waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status) && wpid > 0);
-    }
-
     return SUCCESS;
 }
 
@@ -102,7 +85,7 @@ status_t execute(argument *table)
 
     if (bin == NULL)
     {
-        my_putstr("our_zsh: command not found: ");
+        my_putstr("my_zsh: command not found: ");
         my_putstr(table->args[0]);
         my_putstr("\n");
         return ERROR;

@@ -33,28 +33,45 @@ You must implement the following builtins:
    ```sh
    make
    ```
-2. You can then run the program with "./my_zsh" to run the shell and a prompt ">" will appearthen can use following built-ins: 
-    * echo
+2. You can then run the program with "./my_zsh" to run the shell and a prompt ">" will appear then user can use following built-ins: 
+    * echo:
+         'echo $[VARNAME]' will return the value of environment variables if they exist (case sensitive)
+         'echo "anything"' will return the strings entered without quotations.
     * cd
-    * setenv
-    * unsetenv
-    * env
-    * exit
-    * pwd
-    * which
+         'cd ..' will move back in the path
+         'cd /' will move to /
+         'cd -' will move back to original file position
+         'cd [dirname]' will move to directory if it exists
+   * pwd
+         'pwd' will print the path of the current working directory
 
-    or binary executables:
+   * env
+         'env' will output the environment to terminal
+    * setenv
+         'setenv $[VARNAME] [VALUE]' will set an environment variable and value. Variable names must be uppercase and Variable and value must be separated by a single space.
+    * unsetenv
+         'unsetenv $[VARNAME]' will remove environment variable if it is found in environment
+
+    * exit
+         'exit' will exit ./my_zsh
+
+    * which 
+         'which' will identify the location of binary executables, for built-in functions it will produce a message declaring such
+
+    or binary executables and their arguments:
     * touch
     * ls
     * etc....
 
-   ```sh
-   e.g './my_bc'
-        'nnnnnnn'
-   ```
-3. The program will then run as a replication of zsh
+    compiling '*.c' files with 'make' command followed by the filename without the '.c' extension and subsequently executing the executable with './[FILENAME]
 
-4. You can clean up '.o' files by typing the following command after usage
+   ```sh
+   e.g file: main.c
+         >'make main'
+         >'./main'
+   ```
+
+3. You can clean up '.o' files by typing the following command after usage
     ```sh
    'make clean'
    ```
