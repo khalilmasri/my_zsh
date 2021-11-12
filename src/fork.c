@@ -55,36 +55,19 @@ char *get_run(argument *table)
     return run;
 }
 
-status_t run(argument *table)
-{
-    char *run = get_run(table);
-
-    if (run == NULL)
-    {
-        my_putstr("my_zsh: command not found: ");
-        my_putstr(table->args[0]);
-        my_putstr("\n");
-        return ERROR;
-    }
-
-    if (execve(run, table->args, table->env) == -1)
-    {
-        my_putstr("my_zsh: no such file or directory: ");
-        my_putstr(table->args[0]);
-        my_putstr("\n");
-        return ERROR;
-    }
-    return SUCCESS;
-}
-
 status_t execute(argument *table)
 {
-    pid_t pid, wpid;
+    char *run;
+    pid_t pid, wpid; 
     int status;
-    char *bin = get_bin(table);
 
-    if (bin == NULL)
-    {
+    if(table->command == RUN)
+        run = get_run(table);
+    else
+        run = get_bin(table);
+ 
+
+    if (run == NULL){
         my_putstr("my_zsh: command not found: ");
         my_putstr(table->args[0]);
         my_putstr("\n");
@@ -93,21 +76,28 @@ status_t execute(argument *table)
 
     pid = fork();
 
-    if (pid == 0)
-    {
-        if (execve(bin, table->args, table->env) == 1)
-        {
-            perror("lsh");
+    if (pid == 0){
+        if (execve(run, table->args, table->env) == -1){
+            my_putstr("my_zsh: no such file or directory: ");
+            my_putstr(table->args[0]);
+            my_putstr("\n");
+            free(run);
+            return ERROR;
         }
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        do
-        {
+    }else{
+        do{
             wpid = waitpid(pid, &status, WUNTRACED);
+            if(WTERMSIG(status) == SIGSEGV){
+                my_putstr("Segmentation fault (core dumped) ");
+                my_putstr(table->args[0]);
+                my_putstr("\n");
+                free(run);
+                return ERROR;
+            }
         } while (!WIFEXITED(status) && !WIFSIGNALED(status) && wpid > 0);
     }
 
+    free(run);
     return SUCCESS;
 }
+
