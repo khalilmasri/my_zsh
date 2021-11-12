@@ -29,7 +29,7 @@ You must implement the following builtins:
 ------------------------------------------------------------------------------------------------------------------------------
 ### Program Usage
 
-1. From the terminal move to "my_zsh" directory and type "make" to compile the program.
+1. Type "make" to compile the program.
 
    ```sh
    make
