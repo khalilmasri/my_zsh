@@ -97,6 +97,9 @@ You must implement the following builtins:
     e.g file: main.c
          >'make main'
          >'./main'
+         
+    **NOTE: Two test '.c' files have been left in main folder for behavior examples of a functioning program 
+    and a segfaulting program!!! 
    ```
 
  #### 3. You can clean up '.o' files by typing the following command after usage
