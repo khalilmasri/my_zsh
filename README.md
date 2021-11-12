@@ -26,6 +26,7 @@ You must implement the following builtins:
 * pwd
 * which
 
+------------------------------------------------------------------------------------------------------------------------------
 ### Program Usage
 
 1. From the terminal move to "my_zsh" directory and type "make" to compile the program.
