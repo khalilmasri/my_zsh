@@ -75,7 +75,7 @@ You must implement the following builtins:
          'which' will identify the location of binary executables, for built-in functions it will produce a message declaring such
     ```
     ```sh
-   * or binary executables and their arguments:
+   or binary executables and their arguments:
     * touch
     * ls
     * etc....
