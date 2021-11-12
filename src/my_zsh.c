@@ -42,9 +42,6 @@ status_t my_zsh(argument *table)
     case WHICH:
         func_ptr = which;
         break;
-    case RUN:
-        func_ptr = run;
-        break;
     default:
         func_ptr = execute;
         break;
