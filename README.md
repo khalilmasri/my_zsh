@@ -1,5 +1,8 @@
  <!-- GETTING STARTED -->
 ## My_zsh (UNIX Shell)
+
+Authors: Chris Dallat (www.github.com/chrisdallat), Khalil Masree (www.github.com/khalilmasree)
+
 ### Task Description
 
 Your interpreter will display a prompt: $> (for example)
@@ -35,38 +38,51 @@ You must implement the following builtins:
    make
    ```
 2. You can then run the program with "./my_zsh" to run the shell and a prompt ">" will appear then user can use following built-ins: 
+    ```sh
     * echo:
          'echo $[VARNAME]' will return the value of environment variables if they exist (case sensitive)
          'echo "anything"' will return the strings entered without quotations.
+    ```
+    ```sh
     * cd
          'cd ..' will move back in the path
          'cd /' will move to /
          'cd -' will move back to original file position
          'cd [dirname]' will move to directory if it exists
+    ```
+    ```sh
    * pwd
          'pwd' will print the path of the current working directory
-
+    ```
+    ```sh
    * env
          'env' will output the environment to terminal
-    * setenv
+    ```
+    ```sh
+   * setenv
          'setenv $[VARNAME] [VALUE]' will set an environment variable and value. Variable names must be uppercase and Variable and value must be separated by a single space.
-    * unsetenv
+    ```
+    ```sh
+   * unsetenv
          'unsetenv $[VARNAME]' will remove environment variable if it is found in environment
-
-    * exit
+    ```
+    ```sh
+   * exit
          'exit' will exit ./my_zsh
-
-    * which 
+    ```
+    ```sh
+   * which 
          'which' will identify the location of binary executables, for built-in functions it will produce a message declaring such
-
-    or binary executables and their arguments:
+    ```
+    ```sh
+   * or binary executables and their arguments:
     * touch
     * ls
     * etc....
-
+    ```
+    ```sh
     compiling '*.c' files with 'make' command followed by the filename without the '.c' extension and subsequently executing the executable with './[FILENAME]
-
-   ```sh
+    
    e.g file: main.c
          >'make main'
          >'./main'
