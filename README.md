@@ -60,7 +60,8 @@ You must implement the following builtins:
     ```
     ```sh
    * setenv
-         'setenv $[VARNAME] [VALUE]' will set an environment variable and value. Variable names must be uppercase and Variable and value must be separated by a single space.
+         'setenv $[VARNAME] [VALUE]' will set an environment variable and value. 
+         Variable names must be uppercase and Variable and value must be separated by a single space.
     ```
     ```sh
    * unsetenv
@@ -72,7 +73,8 @@ You must implement the following builtins:
     ```
     ```sh
    * which 
-         'which' will identify the location of binary executables, for built-in functions it will produce a message declaring such
+         'which' will identify the location of binary executables, 
+         for built-in functions it will produce a message declaring such
     ```
     ```sh
    or binary executables and their arguments:
@@ -81,7 +83,8 @@ You must implement the following builtins:
     * etc....
     ```
     ```sh
-    compiling '*.c' files with 'make' command followed by the filename without the '.c' extension and subsequently executing the executable with './[FILENAME]
+    compiling '*.c' files with 'make' command followed by the filename without the '.c' extension 
+    and subsequently executing the executable with './[FILENAME]
     
    e.g file: main.c
          >'make main'
