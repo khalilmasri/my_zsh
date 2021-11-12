@@ -54,9 +54,6 @@ char *get_run(argument *table)
         j++;
     }
     run[j] = '\0';
-
-    printf("current: %s\n", run);
-
     return run;
 }
 
@@ -66,6 +63,7 @@ status_t run(argument *table)
     pid_t pid, wpid;
     int status;
     char *run = get_run(table);
+    printf("current: %s\n", run);
 
     if (run == NULL)
     {
@@ -79,7 +77,7 @@ status_t run(argument *table)
 
     if (pid == 0)
     {
-        if (execv(run, table->args) == 1)
+        if (execve(run, table->args, table->env) == 1)
         {
             perror("lsh");
         }
@@ -114,7 +112,7 @@ status_t execute(argument *table)
 
     if (pid == 0)
     {
-        if (execv(bin, table->args) == 1)
+        if (execve(bin, table->args, table->env) == 1)
         {
             perror("lsh");
         }
