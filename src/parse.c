@@ -16,7 +16,7 @@ char *store_arg(char *str, int index, int size)
 {
     int cur = 0;
 
-    char *arg = malloc((sizeof(char) * size) + 1);
+    char *arg = malloc((sizeof(char) * size)+ 1);
 
     while (str[index] != ' ' && str[index] != '\0')
     {
@@ -64,10 +64,13 @@ builtins_t get_command(argument *table)
 void free_argument(argument *table)
 {
     for (int i = 0; i < table->size; i++)
-    {
         free(table->args[i]);
-        free(table->paths);
-    }
+    
+    for(int i = 0; i < table->paths_size; i++)
+        free(table->paths[i]);
+    
+    for(int i = 0; i < table->env_length; i++)
+        free(table->env[i]);
 }
 
 int get_paths_amount(char *str)
@@ -109,6 +112,9 @@ char **get_paths(argument *table)
     int index = 0;
     char *paths;
 
+    if(table->env_length == 0)
+        return NULL;
+
     while (index < table->env_length)
     {
         if (check_variable_exist("PATH", table->env[index]) == 1)
@@ -141,7 +147,7 @@ argument *parse_input(argument *table, char *input)
         index += size + 1;
         table->args[i] = store_arg(input, index - size - 1, size);
     }
-    table->args[table->size] = NULL;
+
     table->command = get_command(table);
     return table;
 }
