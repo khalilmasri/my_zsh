@@ -22,6 +22,11 @@ int env_length(char **env)
 
 char **get_env(argument *table, char **env)
 {
+    if(*env == NULL){
+        table->env_length = 0;
+        return NULL;
+    }
+
     table->env_length = env_length(env);
 
     table->env = malloc(sizeof(char *) * table->env_length + 1);
@@ -31,8 +36,6 @@ char **get_env(argument *table, char **env)
         table->env[i] = malloc(sizeof(char) * my_strlen(*env));
         my_strcpy(table->env[i], *env);
     }
-
-    table->env[table->env_length] = NULL;
 
     return table->env;
 }
@@ -46,10 +49,20 @@ int correct_char(char c)
     return 0;
 }
 
+int get_var_size(char *str){
+    int index = 0;
+
+    while (str[index] != '=')
+        index++;
+
+    return index;
+}
+
 char *get_variable(char *str)
 {
     int index = 0;
-    char *variable = malloc(sizeof(char) * MAX_STR_LEN);
+    int size = get_var_size(str);
+    char *variable = malloc((sizeof(char) * size)+1);
 
     while (str[index] != '=')
     {
