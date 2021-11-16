@@ -2,7 +2,7 @@ SRC=src
 OBJ=obj
 BIN=bin
 
-CFLAGS +=-W  -Wall -g3 -Iinclude 
+CFLAGS +=-W  -Wall -g3 -Iinclude -fsanitize=address
 CC=gcc
 TARGET=my_zsh
 RM=rm -rf
