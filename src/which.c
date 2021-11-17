@@ -2,24 +2,32 @@
 
 builtins_t is_builtins(char *str)
 {
+    builtins_t ret = UNKNOWN;
     if (my_strcmp(str, "echo") == 0)
-        return ECHO;
+        ret = ECHO;
     if (my_strcmp(str, "cd") == 0)
-        return CD;
+        ret = CD;
     if (my_strcmp(str, "setenv") == 0)
-        return SETENV;
+        ret = SETENV;
     if (my_strcmp(str, "unsetenv") == 0)
-        return UNSETENV;
+        ret = UNSETENV;
     if (my_strcmp(str, "env") == 0)
-        return ENV;
+        ret = ENV;
     if (my_strcmp(str, "exit") == 0)
-        return EXIT;
+        ret = EXIT;
     if (my_strcmp(str, "pwd") == 0)
-        return PWD;
+        ret = PWD;
     if (my_strcmp(str, "which") == 0)
-        return WHICH;
+        ret = WHICH;
 
-    return 0;
+    if(ret != UNKNOWN){
+        char ret_msg[MAX_STR_LEN];
+        my_strcpy(ret_msg, str);
+        my_strcat(ret_msg, ": shell built-in command\n");
+        my_putstr(ret_msg);
+    }
+
+    return ret;
 }
 
 status_t which(argument *table)
@@ -28,6 +36,9 @@ status_t which(argument *table)
     int index = 1, i = 0;
     char ret_msg[MAX_STR_LEN];
     DIR *dir;
+
+    if(is_builtins(table->args[index]) != UNKNOWN)
+        return SUCCESS;
 
     while (i < table->paths_size)
     {
@@ -41,42 +52,33 @@ status_t which(argument *table)
 
         while (table->args[index])
         {
-            if (is_builtins(table->args[index]) != 0)
+            struct dirent *current_file;
+            current_file = readdir(dir);
+            for (; current_file;)
             {
-                my_strcpy(ret_msg, table->args[index]);
-                my_strcat(ret_msg, ": shell built-in command\n");
-                my_putstr(ret_msg);
-                goto found;
-            }
-            else
-            {
-                struct dirent *current_file;
-                current_file = readdir(dir);
-                for (; current_file;)
+                if (!my_strcmp(table->args[index], current_file->d_name))
                 {
-                    if (!my_strcmp(table->args[index], current_file->d_name))
-                    {
-                        my_strcpy(ret_msg, table->paths[i]);
-                        my_strcat(ret_msg, "/");
-                        my_strcat(ret_msg, current_file->d_name);
-                        my_strcat(ret_msg, "\n");
-                        my_putstr(ret_msg);
-                        goto found;
-                    }
-                    current_file = readdir(dir);
+                    my_strcpy(ret_msg, table->paths[i]);
+                    my_strcat(ret_msg, "/");
+                    my_strcat(ret_msg, current_file->d_name);
+                    my_strcat(ret_msg, "\n");
+                    my_putstr(ret_msg);
+                    goto found;
                 }
+                current_file = readdir(dir);
             }
             index++;
         }
         index = 1;
         i++;
+        closedir(dir);
     }
     my_strcpy(ret_msg, table->args[index]);
     my_strcat(ret_msg, " not found.\n");
     my_putstr(ret_msg);
+    return ERROR;
 
 found:
     closedir(dir);
-
     return SUCCESS;
 }
