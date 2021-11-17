@@ -20,7 +20,6 @@
 
 int main(int argc, char *argv[], char **envi)
 {
-
     if (argc > 1)
     {
         *argv = NULL;
@@ -28,7 +27,7 @@ int main(int argc, char *argv[], char **envi)
         return 0;
     }
 
-    char *std_in = "\0";
+    char *std_in;
     status_t status = 0;
     argument *table = malloc(sizeof(argument));
     table->env = get_env(table, envi);
@@ -37,17 +36,19 @@ int main(int argc, char *argv[], char **envi)
 
     while (status != QUIT)
     {
+        std_in = NULL;
         display_prompt();
         std_in = my_readline();
         table->size = arg_count(std_in);
-        table = parse_input(table, std_in);
+        if ((table->args = parse_input(table, std_in)) == NULL)
+            continue;
         status = my_zsh(table);
 
+        free_argument(table);
         free(std_in);
     }
 
-    free_argument(table);
-    free(table);
+    free_table(table);
 
     return 0;
 }
