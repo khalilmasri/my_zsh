@@ -11,30 +11,28 @@ char *get_bin(argument *table)
         dir = opendir(table->paths[i]);
 
         if (!dir)
-        {
-            perror("dir");
             return NULL;
-        }
-
+            
         struct dirent *current_file;
         current_file = readdir(dir);
 
         for (; current_file; current_file = readdir(dir))
         {
-            if (!my_strcmp(table->args[0], current_file->d_name))
+            if (my_strcmp(table->args[0], current_file->d_name) == 0)
             {
                 my_strcpy(bin, table->paths[i]);
                 my_strcat(bin, "/");
                 my_strcat(bin, current_file->d_name);
+                closedir(dir);
                 goto found;
             }
         }
         i++;
         closedir(dir);
     }
+    free(bin);
     return NULL;
 found:
-    closedir(dir);
 
     return bin;
 }
@@ -66,11 +64,11 @@ status_t execute(argument *table)
     else
         run = get_bin(table);
  
-
     if (run == NULL){
         my_putstr("my_zsh: command not found: ");
         my_putstr(table->args[0]);
         my_putstr("\n");
+        free(run);
         return ERROR;
     }
 
@@ -87,10 +85,7 @@ status_t execute(argument *table)
     }else{
         do{
             wpid = waitpid(pid, &status, WUNTRACED);
-            if(WTERMSIG(status) == SIGSEGV){
-                my_putstr("Segmentation fault (core dumped) ");
-                my_putstr(table->args[0]);
-                my_putstr("\n");
+            if(handle_signal(table->args[0],status) != SUCCESS){
                 free(run);
                 return ERROR;
             }
