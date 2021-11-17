@@ -4,6 +4,7 @@ char *my_readline()
 {
     char *buffer = NULL;
     buffer = malloc(sizeof(char) * MAX_STR_LEN);
+    memset(buffer, '\0', MAX_STR_LEN);
 
     int read_input = STDIN_FILENO;
 
