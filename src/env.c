@@ -2,7 +2,7 @@
 
 status_t env(argument *table)
 {
-    for (int i = 0; i < table->env_length; i++)
+    for (int i = 0; i < table->env_length-1; i++)
     {
         printf("%s\n", table->env[i]);
     }
@@ -17,23 +17,28 @@ int env_length(char **env)
     for (; *env; env++)
         i++;
 
-    return i;
+    return i+1;
 }
 
 char **get_env(argument *table, char **env)
 {
+    if(*env == NULL){
+        table->env_length = 0;
+        return NULL;
+    }
+
     table->env_length = env_length(env);
 
-    table->env = malloc(sizeof(char *) * table->env_length + 1);
-
-    for (int i = 0; *env; env++, i++)
+    int i = 0;
+    table->env = malloc(sizeof(char *) * table->env_length);
+    
+    for (; *env; env++, i++)
     {
         table->env[i] = malloc(sizeof(char) * my_strlen(*env));
         my_strcpy(table->env[i], *env);
     }
 
-    table->env[table->env_length] = NULL;
-
+    table->env[i] = NULL;
     return table->env;
 }
 
@@ -49,6 +54,10 @@ int correct_char(char c)
 char *get_variable(char *str)
 {
     int index = 0;
+
+    if(str == NULL)
+        return NULL;
+
     char *variable = malloc(sizeof(char) * MAX_STR_LEN);
 
     while (str[index] != '=')
@@ -111,9 +120,12 @@ int check_variable_exist(char *new, char *exist)
 {
     char *exist_var = get_variable(exist);
 
-    if (!(my_strcmp(new, exist_var)))
+    if (!(my_strcmp(new, exist_var))){
+        free(exist_var);
         return 1;
+    }
 
+    free(exist_var);
     return 0;
 }
 
@@ -130,45 +142,58 @@ char **add_variable(argument *table)
 {
     table->env_length += 1;
 
-    char **ret = malloc(sizeof(char *) * table->env_length + 1);
+    char **ret = malloc(sizeof(char *) * table->env_length);
+
     for (int i = 0; i < table->env_length; i++)
     {
-        if (i != table->env_length - 1)
+        if (i < table->env_length - 2)
         {
             ret[i] = malloc(sizeof(char) * my_strlen(table->env[i]));
             my_strcpy(ret[i], table->env[i]);
         }
+        else if(i == table->env_length -1){
+            ret[i] = NULL;
+        }
         else
         {
-            ret[i] = malloc(sizeof(char) * (my_strlen(table->args[2]) + my_strlen(table->args[1])) + 2);
+            ret[i] = malloc(sizeof(char) * (my_strlen(table->args[2]) + my_strlen(table->args[1]) + 1));
             my_strcpy(ret[i], table->args[1]);
             my_strcat(ret[i], "=");
             my_strcat(ret[i], table->args[2]);
         }
     }
+
+    free_env(table);
+
     return ret;
 }
 
 char **delete_variable(argument *table, int index)
 {
-    table->env_length -= 1;
-    char **ret = malloc(sizeof(char *) * table->env_length + 1);
+    char **ret = malloc(sizeof(char *) * (table->env_length-1));
 
-    for (int i = 0, j = 0; i < table->env_length; i++, j++)
+    for (int i = 0, j = 0; i < table->env_length-1; i++, j++)
     {
         if (i == index)
         {
             j++;
         }
+        if(i == table->env_length -2){
+            ret[i] = NULL;
+            break;
+    }
         ret[i] = malloc(sizeof(char) * my_strlen(table->env[j]));
         my_strcpy(ret[i], table->env[j]);
     }
+
+    free_env(table);
+    table->env_length -= 1;
     return ret;
 }
 
 status_t my_setenv(argument *table)
 {
-    if (table->size != 3)
+    if (table->size != 4)
     {
         my_putstr("setenv usage: setenv NEWVALUE value.\n");
         return ERROR;
@@ -192,6 +217,7 @@ status_t my_setenv(argument *table)
         }
         i++;
     }
+
     table->env = add_variable(table);
 
     return SUCCESS;
@@ -199,7 +225,7 @@ status_t my_setenv(argument *table)
 
 status_t my_unsetenv(argument *table)
 {
-    if (table->size != 2)
+    if (table->size != 3)
     {
         my_putstr("unsetenv usage: unsetenv NEWVALUE.\n");
         return ERROR;
