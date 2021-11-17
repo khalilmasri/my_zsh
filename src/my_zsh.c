@@ -6,8 +6,8 @@ status_t my_zsh(argument *table)
         return ERROR;
 
     status_t (*func_ptr)(argument *);
-
-    char *buffer = malloc(sizeof(char) * MAX_STR_LEN);
+ 
+    char buffer[MAX_STR_LEN];
     switch (table->command)
     {
     case CD:
@@ -36,7 +36,6 @@ status_t my_zsh(argument *table)
         }
         my_putstr(buffer);
         my_putstr("\n");
-        free(buffer);
         return SUCCESS;
         break;
     case WHICH:
@@ -46,5 +45,6 @@ status_t my_zsh(argument *table)
         func_ptr = execute;
         break;
     }
+
     return func_ptr(table);
 }
