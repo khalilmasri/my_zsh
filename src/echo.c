@@ -90,7 +90,7 @@ char *cut_variable(char *str)
 
 status_t find_in_env(argument *table)
 {
-    if (table->size > 2)
+    if (table->size != 3)
     {
         my_putstr("Can check one variable in ENV at a time.\n");
         return ERROR;
@@ -104,8 +104,10 @@ status_t find_in_env(argument *table)
     {
         if (check_variable_exist(table->args[1], table->env[index]) == 1)
         {
-            my_putstr(cut_variable(table->env[index]));
+            char *var = cut_variable(table->env[index]);
+            my_putstr(var);
             my_putstr("\n");
+            free(var);
             return SUCCESS;
         }
         index++;
