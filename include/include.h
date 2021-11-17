@@ -38,6 +38,7 @@ typedef enum{
     WHICH,
     RUN,
     EXECUTE,
+    UNKNOWN,
 }builtins_t;
 
 // STRUCTS
@@ -77,6 +78,7 @@ void my_putchar(int, char*);
 
 void print_current_dir();
 void display_prompt();
+status_t handle_signal(char*, int);
 
 #endif
 // --------------------------------------------------------------------------------
@@ -92,9 +94,12 @@ char *my_readline();
 #ifndef PARSE_H
 #define PARSE_H
 
-argument *parse_input(argument*, char*);
+char **parse_input(argument*, char*);
 void free_argument(argument*);
 char **get_paths(argument*);
+void free_table(argument*);
+void free_env(argument*);
+void free_paths(argument*);
 
 #endif
 // --------------------------------------------------------------------------------
@@ -110,7 +115,6 @@ status_t env(argument*);
 status_t my_setenv(argument*);
 char **get_env(argument*,char**);
 int check_variable_exist(char*, char*);
-char *cut_variable(char*);
 status_t my_unsetenv(argument*);
 char* get_run(argument*);
 status_t run(argument*);
@@ -118,3 +122,12 @@ status_t execute(argument*);
 
 #endif
 // --------------------------------------------------------------------------------
+
+#ifndef MY_ECHO_H
+#define MY_ECHO_H
+
+status_t echo(argument*);
+char *cut_dollar(char*);
+char *cut_variable(char*);
+
+#endif
