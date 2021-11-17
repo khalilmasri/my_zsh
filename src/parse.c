@@ -4,11 +4,12 @@ int get_input_size(char *str, int index)
 {
     int size = 0;
 
-    while (str[index] != ' ' && str[index] != '\0')
+    while (str[index] && str[index] != ' ')
     {
         size++;
         index++;
     }
+
     return size;
 }
 
@@ -16,9 +17,13 @@ char *store_arg(char *str, int index, int size)
 {
     int cur = 0;
 
-    char *arg = malloc((sizeof(char) * size) + 1);
+    if(!str[index])
+        return NULL;
 
-    while (str[index] != ' ' && str[index] != '\0')
+    size++;
+    char *arg = malloc(sizeof(char) * size);
+
+    while (cur < size-1)
     {
         arg[cur] = str[index];
         cur++;
@@ -30,7 +35,7 @@ char *store_arg(char *str, int index, int size)
 
 void print_argument(argument *table)
 {
-    printf("Command type : %d\n", table->command);
+    printf("%d\n", table->command);
     for (int i = 0; i < table->size; i++)
         printf("%s ", table->args[i]);
 
@@ -63,11 +68,33 @@ builtins_t get_command(argument *table)
 
 void free_argument(argument *table)
 {
-    for (int i = 0; i < table->size; i++)
-    {
+    for (int i = 0; i < table->size-1; i++)
         free(table->args[i]);
-        free(table->paths);
-    }
+
+    free(table->args);
+}
+
+void free_env(argument *table){
+
+    for (int i = 0; i < table->env_length-1; i++)
+        free(table->env[i]);
+
+    free(table->env);
+}
+
+void free_paths(argument *table){
+    
+    for (int i = 0; i < table->paths_size; i++)
+        free(table->paths[i]);
+
+    free(table->paths);
+}
+
+void free_table(argument *table){
+
+    free_paths(table);
+    free_env(table);
+    free(table);
 }
 
 int get_paths_amount(char *str)
@@ -106,6 +133,9 @@ char *add_paths(char *path)
 
 char **get_paths(argument *table)
 {
+    if(table->env_length == 0)
+        return NULL;
+
     int index = 0;
     char *paths;
 
@@ -125,15 +155,20 @@ char **get_paths(argument *table)
     {
         ret[i] = add_paths(paths);
     }
+    free(paths);
     return ret;
 }
 
-argument *parse_input(argument *table, char *input)
+char **parse_input(argument *table, char *input)
 {
     int index = 0,
         size = 0;
 
-    table->args = malloc(sizeof(char *) * table->size + 1);
+    if(!input)
+        return NULL;
+    
+    table->size++;
+    table->args = malloc(sizeof(char *) * (table->size));
 
     for (int i = 0; i < table->size; i++)
     {
@@ -141,7 +176,8 @@ argument *parse_input(argument *table, char *input)
         index += size + 1;
         table->args[i] = store_arg(input, index - size - 1, size);
     }
-    table->args[table->size] = NULL;
+
     table->command = get_command(table);
-    return table;
+    /* print_argument(table); */
+    return table->args;
 }
