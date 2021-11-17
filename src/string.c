@@ -3,6 +3,8 @@
 size_t my_strlen(char *str)
 {
     size_t size = 0;
+    if(!str)
+        return size;
 
     while (str[size])
         size++;
@@ -12,6 +14,9 @@ size_t my_strlen(char *str)
 
 int is_exec(char *str)
 {
+    if(!str)
+        return 0;
+
     if (str[0] == '.' && str[1] == '/')
         return 1;
     return 0;
@@ -19,6 +24,9 @@ int is_exec(char *str)
 
 char *my_strcpy(char *dest, char *src)
 {
+    if(!src)
+        return NULL;
+
     while (*src != '\0')
     {
         *dest++ = *src++;
@@ -31,6 +39,9 @@ char *my_strcpy(char *dest, char *src)
 int my_strcmp(char *ptr1, char *ptr2)
 {
     int i = 0;
+
+    if(!ptr1 || !ptr2)
+        return -1;
 
     while ((ptr1[i] != '\0') || (ptr2[i] != '\0'))
     {
@@ -64,19 +75,16 @@ int arg_count(char *str)
 {
 
     int index = 0,
-        size = 0;
+        size = 1;
 
     while (str[index])
     {
-
         if (str[index] == ' ')
-        {
             size++;
-            index++;
-        }
+        
         index++;
     }
-    size++;
+
     return size;
 }
 
